@@ -14,14 +14,7 @@ public:
         {
             for(int j = i; j>=0; j--)
             {
-               
-                     int di = INT_MAX;
-                     int dn = INT_MAX;
-                     dn = triangle[i][j] + dp[i+1][j];
-                     di = triangle[i][j] + dp[i+1][j+1];
-                     dp[i][j] = min(dn,di);
-                     
-                
+                     dp[i][j] = min(triangle[i][j] + dp[i+1][j], triangle[i][j] + dp[i+1][j+1] );
             }
         }
        
