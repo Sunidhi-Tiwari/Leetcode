@@ -23,6 +23,7 @@ public:
             {
                  ListNode* temp = cur->next;
                  cur->next = temp->next;
+                delete temp;
                  
             }
             else
