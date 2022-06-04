@@ -12,38 +12,19 @@ class Solution {
 public:
     void reorderList(ListNode* head) {
         
-        if((!head) || (!head->next) || (!head->next->next)) return;
+       vector<ListNode*> arr;
+        for(auto iter = head; iter; iter = iter -> next)
+            arr.push_back(iter);
         
-        stack<ListNode*> st;
+		// pointers to start and end of list. Re-order in alternating fashion from both end
+        int L = 1, R = size(arr)-1;
+        for(int i = 0; i < size(arr); i++, head = head -> next) 
+            if(i & 1)                             // odd iteration:
+                head -> next = arr[L++];          //        - pick node from L & update L ptr
+            else                                  // even iteration
+                head -> next = arr[R--];          //        - pick node from R & update R ptr
         
-        ListNode* ptr = head;
-        
-        int cnt = 0;
-        
-        while(ptr != NULL)
-            
-        {
-            st.push(ptr);
-            ptr = ptr->next;
-            cnt++;
-        }
-        
-        ptr = head;
-        
-        for(int i = 0; i<cnt/2; i++)
-        {
-            
-            ListNode* element = st.top();
-            st.pop();
-            element->next = ptr->next;
-            ptr->next = element;
-            ptr = ptr->next->next;
-            
-        
-        }
-        
-        ptr->next = NULL;
-        
+        head -> next = nullptr;
         
         
     }
