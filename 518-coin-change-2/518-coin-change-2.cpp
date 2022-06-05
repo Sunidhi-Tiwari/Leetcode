@@ -4,27 +4,30 @@ public:
         
         int n = coins.size();
 
-        vector<vector<int>> dp(n, vector<int>(amount+1,-1));
+        vector<vector<int>> dp(n, vector<int>(amount+1,0));
         
-        return f(n-1, amount, coins, dp);
+        return f(n, amount, coins, dp);
         
     }
     
-    int f(int ind, int tar, vector<int>& coins,  vector<vector<int>> &dp )
+    int f(int n, int target, vector<int>& coins,  vector<vector<int>> &dp )
     {
-        if(ind == 0)
-        {
-            if(tar%coins[0] == 0) return 1;
-            else return 0;
-        }
         
-        if(dp[ind][tar] != -1) return dp[ind][tar];
+        for(int i = 0; i<=target; i++)
+            if(i%coins[0] == 0) dp[0][i] = 1;
+    
         
-        int nottake = f(ind-1, tar, coins, dp);
-        int take = 0;
-        if(coins[ind] <= tar) take = f(ind, tar-coins[ind], coins, dp);
+       for(int ind = 1; ind<n; ind++)
+       {
+           for(int tar = 0; tar<=target; tar++)
+           {
+               int nottake = dp[ind-1][tar];
+               int take = 0;
+               if(coins[ind] <= tar) take = dp[ind][tar-coins[ind]];
         
-       return dp[ind][tar] = take + nottake;
-            
+               dp[ind][tar] = take + nottake;
+           }
+       }
+            return dp[n-1][target];
     }
 };
