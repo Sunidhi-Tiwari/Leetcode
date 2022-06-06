@@ -3,7 +3,11 @@ class Solution {
     void f(int ind, int target, vector<int>& candidates, vector<vector<int>> & ans, vector<int> &ds)
     {   
         if(target<0) return;
-        
+        if(target == 0) 
+        {
+            ans.push_back(ds);
+            return;
+        }
         if(ind == candidates.size())
         {
             if(target == 0)
