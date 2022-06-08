@@ -6,21 +6,21 @@ public:
         
         if(n<=2) return 0;
         
-        long long int cnt = 0;
-         long long int ans = 0;
+        vector<int> dp(n,0);
         
-        for(int i = 0; i<n-2; i++)
+        if(nums[2]-nums[1] == nums[1] - nums[0]) dp[2] = 1;
+        
+        int ans = dp[2];
+        for(int i = 3; i<n; i++)
         {
-            if(nums[i+2] - nums[i+1] == nums[i+1] - nums[i])
-                cnt++;
-            else
-            {
-                ans += (cnt*(cnt+1))/2;
-                cnt = 0;
-            }
+            if(nums[i] - nums[i-1] == nums[i-1] - nums[i-2])
+                dp[i] = 1 + dp[i-1];
+            
+            ans += dp[i];
+           
         }
         
-        if(cnt) ans +=  (cnt*(cnt+1))/2;
+       
         return ans;
     }
 };
