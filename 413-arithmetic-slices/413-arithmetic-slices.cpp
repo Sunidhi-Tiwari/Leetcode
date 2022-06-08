@@ -6,17 +6,23 @@ public:
         
         if(n<=2) return 0;
         
-        vector<int> dp(n,0);
+        int prev = 0;
+        int cur = 0;
         
-        if(nums[2]-nums[1] == nums[1] - nums[0]) dp[2] = 1;
+        if(nums[2]-nums[1] == nums[1] - nums[0]) prev = 1;
         
-        int ans = dp[2];
+        int ans = prev;
+        
         for(int i = 3; i<n; i++)
         {
             if(nums[i] - nums[i-1] == nums[i-1] - nums[i-2])
-                dp[i] = 1 + dp[i-1];
+            {cur = 1 + prev;
+             prev = cur;
+             }
+            else prev = 0;
             
-            ans += dp[i];
+            ans += prev;
+            
            
         }
         
