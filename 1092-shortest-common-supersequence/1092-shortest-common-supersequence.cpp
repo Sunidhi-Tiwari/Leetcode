@@ -1,61 +1,59 @@
 class Solution {
 public:
     string shortestCommonSupersequence(string s1, string s2) {
-        int n=s1.size(); 
-        int m=s2.size();
-        int t[n+1][m+1]; //table generated while computing LCS length
-        string res; // result	
-        // compute LCS length using tabulation      
-    for(int i=0;i<=n;i++)
-    {
-        for(int j=0;j<=m;j++)
+     
+        
+          int n = s1.size();
+          int m = s2.size();
+        
+        vector<vector<int>> dp(n+1, vector<int>(m+1));
+        
+        for(int i = 0; i<=n; i++) dp[i][0] = 0;
+        for(int j = 0; j<=m; j++) dp[0][j] = 0;
+        
+        for(int i = 1; i<=n; i++)
         {
-            if(i==0||j==0)
-                t[i][j]=0;
-            else if(s1[i-1]==s2[j-1])
+            for(int j = 1; j<=m; j++)
             {
-                t[i][j]=1+t[i-1][j-1];
-            }
-            else
-            {
-                t[i][j]=max(t[i-1][j],t[i][j-1]);
+                if(s1[i-1] == s2[j-1]) dp[i][j] = 1 + dp[i-1][j-1];
+                else dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+                
             }
         }
-    }     
-       //print lcs
-    int i=n,j=m;
-    while(i>0 && j>0)
-    {
-        if(s1[i-1]==s2[j-1])
+         
+        string ans = "";
+        
+        int i = n, j = m;
+        
+        while(i>0 && j>0)
         {
-            res.push_back(s1[i-1]);
-            i--;
-            j--;
-        }
-        else
-        {
-            if(t[i-1][j]>t[i][j-1])
-            {
-                res.push_back(s1[i-1]);
+            if(s1[i-1] == s2[j-1])
+            {   
+                ans += s1[i-1];
                 i--;
-            } else{
-                res.push_back(s2[j-1]);
                 j--;
             }
+            
+            else if(dp[i-1][j] >= dp[i][j-1])
+            {
+                ans += s1[i-1];
+                i--;
+            }
+            
+            else if(dp[i-1][j] < dp[i][j-1])
+             {
+                 ans += s2[j-1];
+                 j--;
+                        
+             }
         }
-    }
-    while(i>0) // if s1 characters are still left
-    {
-        res.push_back(s1[i-1]);
-        i--;
-    }
-    while(j>0) //if s2 characters are still left
-    {
-        res.push_back(s2[j-1]);
-        j--;
-        
-    }
-        reverse(res.begin(),res.end()); 
-        return res;
+                    
+            
+        while(i>0) {ans += s1[i-1]; i--;}
+        while(j>0) {ans += s2[j-1]; j--;}   
+        reverse(ans.begin(), ans.end());
+                    
+                    return ans;
+                    
     }
 };
