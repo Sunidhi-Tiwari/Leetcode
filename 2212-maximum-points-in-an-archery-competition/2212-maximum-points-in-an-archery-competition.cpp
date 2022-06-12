@@ -2,62 +2,46 @@ class Solution {
     
     
  public:
+    vector<int> ans;
+    int target = 0;
     
     vector<int> maximumBobPoints(int numArrows, vector<int>& aliceArrows) {
         
-       vector<int> ans;
+       vector<int> res(12,0);
+       rec(11, numArrows, aliceArrows, 0, res);
+       return ans;
        
-       int maxo = 0;
-       int total = (1<<12);
-       
-        for(int i = 0; i<total; i++)
-        {
-            vector<int> temp(12,0);
-            
-            int count = numArrows;
-            int sum = 0;
-            for(int j = 0; j<12; j++)
-            {   
-                if( i & (1<<j) )
-                {
-                    if(aliceArrows[j] + 1 <= count)
-                    {
-                        count -= aliceArrows[j] + 1;
-                        temp[j] = aliceArrows[j] + 1;
-                    }
-                }
-            }
-            
-            
-             if(count){
-                int pos=0,mini=INT_MAX;
-                for(int i=11;i>=0;i--){
-                    if(temp[i]<mini){
-                        mini=temp[i];
-                        pos=i;
-                    }
-                }
-                temp[pos]=count;
-                count=0;
-             }
-                 
-                 
-            
-            for(int i = 0; i<12; i++)
-            {
-                if(temp[i] > aliceArrows[i])
-                    sum += i;
-            }
-            
-             
-            if(sum>maxo)
-            {
-                ans = temp;
-                maxo = sum;
-            }
-            
-                 
     }
-        return ans;
+    
+    void rec(int i, int count, vector<int>& aliceArrows, int sum,  vector<int> &res )
+    {
+        if(i < 0 || count<=0)
+        {
+            if(sum>target)
+            {
+                target = sum;
+                 if (count > 0)
+                {
+                    res[0] += count;
+                }
+                ans = res;
+            }
+            
+            return;
+            
+        }
+        
+        int req = aliceArrows[i] + 1;
+        
+        if(req<=count)
+        {   
+            res[i] = req;
+            rec(i-1, count - req, aliceArrows, sum+i, res);
+            res[i] = 0;
+        }
+        
+        rec(i-1, count, aliceArrows, sum, res);
+        return;
+        
     }
 };
