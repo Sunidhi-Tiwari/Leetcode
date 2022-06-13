@@ -2,33 +2,30 @@ class Solution {
 public:
     int dp[301];
     
-    int f(int i, string &s, set<string> & dict)
-    {
-        if(i == s.size()) return 1;
-        if(dp[i]!=-1) return dp[i];
-        
-        string temp;
-        
-        for(int j = i; j<s.size(); j++)
-        {   
-            temp += s[j];
-            if(dict.find(temp) != dict.end())
-            {
-                if(f(j+1, s, dict)) return dp[i] = 1;
-            }
-        }
-        
-        return dp[i] = 0;
-    }
-    
-    
     bool wordBreak(string s, vector<string>& wordDict) {
         
         set<string> dict;
         for(auto a: wordDict) dict.insert(a);
-        memset(dp, -1, sizeof(dp));
+        int n = s.size();
         
-        return f(0, s, dict);
+        dp[n] = 1;
+        
+        for(int i = n-1; i>=0; i--)
+        {
+            string temp;
+            for(int j = i; j<n; j++)
+            {
+                temp += s[j];
+                if(dict.find(temp) != dict.end() && dp[j+1])
+                {
+                    dp[i] = 1;
+                    break;
+                }
+            }
+        }
+        
+        
+        return dp[0];
         
         
     }
