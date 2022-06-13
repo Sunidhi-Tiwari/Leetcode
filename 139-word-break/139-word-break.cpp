@@ -4,24 +4,28 @@ public:
     
     bool wordBreak(string s, vector<string>& wordDict) {
         
-          queue<int> q({0});
-        unordered_set<int> vstd;
-        set<string> dict;
-        for(auto a: wordDict) dict.insert(a);
-        int n = s.size();
-        while(!q.empty()) {
-            int start = q.front();
-            q.pop();
-            if(vstd.count(start)) continue;
-            vstd.insert(start);
-            string sub;
-            for(int i=start;i<n;i++) 
-                if(dict.count(sub+=s[i])) {
-                    q.push(i+1);
-                    if(i+1 == n) return 1;    
+             set<string> dict;
+             for(auto a: wordDict) dict.insert(a);
+             int n = s.size();
+         vector<int> dp(n+1,0);
+         dp[n] = 1;
+        
+        for(int i = n-1; i>=0; i--)
+        {
+            string temp;
+            for(int j = i; j<n; j++)
+            {
+                temp += s[j];
+                if(dict.find(temp) != dict.end() && dp[j+1])
+                {
+                    dp[i] = 1;
+                    break;
                 }
+            }
         }
-        return 0;    
+        
+        
+        return dp[0];
         
         
     }
