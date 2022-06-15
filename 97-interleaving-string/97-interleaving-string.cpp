@@ -9,21 +9,27 @@ public:
         
         if(s3.length() != n+m) return false;
         
-        vector<vector<bool>> dp(n+1, vector<bool>(m+1,false));
+           vector<bool> prev(m+1,false);
+           vector<bool> cur(m+1,false);
         
-        dp[0][0] = true;
+         prev[0] = true;
         
-         for(int j = 1; j<=m; j++) if(s2[j-1] == s3[j-1] && dp[0][j-1] == true) dp[0][j] = true;
-         for(int i = 1; i<=n; i++) if(s1[i-1] == s3[i-1] && dp[i-1][0] == true) dp[i][0] = true;
+         for(int j = 1; j<=m; j++) if(s2[j-1] == s3[j-1] && prev[j-1] == true) prev[j] = true;
+         
         
         for(int i = 1; i<=n; i++)
-        {
+        {   
+              if(s1[i-1] == s3[i-1] && prev[i-1] == true ) cur[0] = true;
+            
+                
             for(int j = 1; j<=m; j++)
             {
-              dp[i][j] = (dp[i - 1][j] && s1[i - 1] == s3[i + j - 1]) || (dp[i][j - 1] && s2[j - 1] == s3[i + j - 1]);
+              cur[j] = (prev[j] && s1[i - 1] == s3[i + j - 1]) || (cur[j - 1] && s2[j - 1] == s3[i + j - 1]);
               
             }
+            
+            prev = cur;
         }
         
-        return dp[n][m];    }
+        return prev[m];    }
 };
