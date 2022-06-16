@@ -1,63 +1,67 @@
 class Solution {
 public:
+    
+    struct node
+    {
+        int val;
+        int row;
+        int col;
+        
+        node(int v, int r, int c): val(v) , row(r), col(c)
+        {
+            
+        }
+        
+    };
+    
+    struct comp
+    {
+        bool operator() (const node& a, const node& b)
+        {
+            return a.val>b.val;
+        }
+    };
+    
     vector<int> smallestRange(vector<vector<int>>& nums) {
         
-        int n = nums.size();
-        vector<pair<int,int>> a;
         
-        for(int i = 0; i<nums.size(); i++)
+        priority_queue<node, vector<node>, comp> pq;
+        int n = nums.size();
+        int high = -1e9;
+        
+        for(int i = 0; i<n; i++)
         {
-            for(auto j: nums[i])
-            {
-                a.push_back({j,i});
-            }
-            
+            pq.push(node(nums[i][0], i, 0));
+            high = max(high, nums[i][0]);
         }
         
-        sort(a.begin(), a.end());
-        
-        int mini = 1e9;
-        int diff = nums.size();
-        int arr[diff];
-        
-        memset(arr, 0, sizeof(arr));
-        
-        int total = 0;
-        int j = 0;
+        int low = pq.top().val;
         
         vector<int> ans;
+        ans = {low, high};
         
-        for(int i = 0; i<(int)a.size(); i++)
+        while(pq.size() == n)
         {
-            arr[a[i].second]++;
-            if(arr[a[i].second] == 1) total++;
+            auto cur = pq.top();
+            pq.pop();
             
-            if(total == diff)
+            if(cur.col + 1 < nums[cur.row].size())
             {
-                if(a[i].first - a[j].first + 1< mini)
-                {
-                    mini = a[i].first - a[j].first + 1;
-                    ans = {a[j].first,a[i].first};
-                }
-            }
-            
-            if(total == diff)
-            {
-            while(total == diff)
-            {
-                if(arr[a[j].second]>1) arr[a[j].second]--, j++;
-                else
-                    break;
-            }
-            
-            if(a[i].first - a[j].first + 1< mini)
-                {
-                    mini = a[i].first - a[j].first + 1;
+                pq.push(node(nums[cur.row][cur.col + 1], cur.row, cur.col+1));
                 
-                    ans = { a[j].first,a[i].first };
+                high = max(high, nums[cur.row][cur.col+1]);
+                
+                low = pq.top().val;
+                
+                if(high - low < ans[1] - ans[0])
+                {
+                    ans[1] = high;
+                    ans[0] = low;
                 }
-            }
+            }  
+            
         }
+        
         
         return ans;
     }
