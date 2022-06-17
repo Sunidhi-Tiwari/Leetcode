@@ -1,22 +1,44 @@
 class Solution {
 public:
-    bool isPossibleDivide(vector<int>& A, int k) {
-       
-         map<int, int> c;
-        for (int i : A) c[i]++;
-        queue<int> start;
-        int last_checked = -1, opened = 0;
-        for (auto it : c) {
-            int i = it.first;
-            if (opened > 0 && i > last_checked + 1 || opened > c[i]) return false;
-            start.push(c[i] - opened);
-            last_checked = i, opened = c[i];
-            if (start.size() == k) {
-                opened -= start.front();
-                start.pop();
+    
+    
+    bool isPossibleDivide(vector<int>& nums, int k) {
+        
+        
+        map<int,int> mp;
+        int n = nums.size();
+        map<int, int>:: iterator it;
+        
+        if(n%k != 0) return false;
+        
+        for(int i = 0; i<n; i++)
+        {
+            mp[nums[i]]++;
+           
+         
+        }
+        
+        for(it = mp.begin(); it!= mp.end(); it++)
+        {
+            if(it->second)
+            {
+                int freq = it->second;
+                
+                for(int i = 0; i<k; i++)
+                {
+                    if(mp[it->first+i]<freq)
+                        return false;
+                    else
+                        mp[it->first+i] -= freq;
+                    
+                }
             }
         }
-        return opened == 0;
+
+        
+       return true;
+      
+        
         
     }
 };
