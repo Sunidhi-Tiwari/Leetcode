@@ -34,11 +34,7 @@ public:
           if(!A) return 1;
     if(!A->next) return 1;
     
-    if(!A->next->next)
-    {
-        if(A->val != A->next->val) return 0;
-        else return 1;
-    }
+    
     
     ListNode* fast = A;
     ListNode* slow = A;
