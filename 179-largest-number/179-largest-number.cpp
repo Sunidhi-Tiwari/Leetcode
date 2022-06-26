@@ -2,21 +2,19 @@ class Solution {
 public:
     
     
-    static bool comp(int a, int b)
-    {
-        return to_string(a) + to_string(b) > to_string(b) + to_string(a);
-    }
-    
-    string largestNumber(vector<int>& nums) {
+   
+    string largestNumber(vector<int>& num) {
         
-        string ans = "";
-        if(nums.size() == 0) return ans;
         
-        sort(nums.begin(), nums.end(), comp);
-        for(int i=0; i<nums.size(); i++){
-            ans += to_string(nums[i]);
-        }
-        return (ans[0] == '0') ? "0" : ans;
-        
+        vector<string> arr;
+        for(auto i:num)
+            arr.push_back(to_string(i));
+        sort(begin(arr), end(arr), [](string &s1, string &s2){ return s1+s2>s2+s1; });
+        string res;
+        for(auto s:arr)
+            res+=s;
+        while(res[0]=='0' && res.length()>1)
+            res.erase(0,1);
+        return  res;
     }
 };
